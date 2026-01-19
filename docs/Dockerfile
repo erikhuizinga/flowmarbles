@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+FROM eclipse-temurin:21-jre
 
 COPY ./build/libs /usr/app
 WORKDIR /usr/app
