@@ -9,7 +9,10 @@ import com.github.rougsig.flowmarbles.operators.operators
 import org.w3c.dom.HashChangeEvent
 import kotlinx.browser.document
 import kotlinx.browser.window
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 fun main() {
   val app = document.getElementById("app")!!
   val header = html("header") {

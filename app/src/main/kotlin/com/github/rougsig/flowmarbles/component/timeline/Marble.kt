@@ -9,6 +9,7 @@ class Marble<T : Any>(model: Model<T>, posY: Long = 1) : Component {
     val time: Long,
     val value: T
   ) {
+    @Suppress("UNCHECKED_CAST")
     operator fun plus(other: Model<T>): Model<T> {
       val newValue: T = if (this.value as? Int != null && other.value as? Int != null) {
         (value + other.value) as T
