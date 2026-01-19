@@ -37,7 +37,7 @@ fun main() {
             link.attr("href", absoluteHref + href.dropWhile { it != '#' })
           }
           val template = Jsoup.parse(Resource.read("/template.html"))
-          val root = template.selectFirst("body")
+          val root = template.selectFirst("body") ?: error("Template body element missing.")
           pageContents.forEach { root.appendChild(it) }
           root.select(".top-right-position").remove()
           call.respondText(template.html(), ContentType.Text.Html)
