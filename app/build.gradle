@@ -22,3 +22,14 @@ kotlin {
     }
   }
 }
+
+def externalScriptsEnabled = providers.gradleProperty("enableExternalScripts").map { it == "true" }.orElse(false)
+def externalScriptsFile = file("src/main/resources/external-scripts.html")
+def externalScriptsMarker = "@EXTERNAL_SCRIPTS@"
+
+tasks.withType(ProcessResources).configureEach {
+  filesMatching("index.html") {
+    def scripts = externalScriptsEnabled.get() ? externalScriptsFile.getText("UTF-8") : ""
+    filter { line -> line.replace(externalScriptsMarker, scripts) }
+  }
+}
