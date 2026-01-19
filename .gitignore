@@ -1,6 +1,7 @@
 out/
 build/
 .gradle/
+.kotlin/
 kotlin-js-store/
 .idea/*
 .idea/workspace.xml
