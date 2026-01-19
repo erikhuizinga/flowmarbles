@@ -23,9 +23,10 @@ fun main() {
       get("/{page}") {
         try {
           val page = call.parameters["page"]!!
+          val pageName = page.toCamelKebabCase()
           val uri = URI(BASE_DOCS_URL)
-          val doc = getDocsHtml("$BASE_DOCS_URL${page.toCamelKebabCase()}.html")
-          println("$BASE_DOCS_URL${call.parameters["page"]}.html")
+          val doc = getDocsHtml(pageName)
+          println("$BASE_DOCS_URL$pageName.html")
 
           val pageContents = doc.select(".content")
           if (pageContents.isEmpty()) error("Content not found for: '$page'")
@@ -49,10 +50,15 @@ fun main() {
   }.start(wait = true)
 }
 
-private suspend fun getDocsHtml(url: String): Document = withContext(Dispatchers.IO) {
+private suspend fun getDocsHtml(pageName: String): Document = withContext(Dispatchers.IO) {
   suspendCoroutine { cont ->
     try {
-      cont.resume(Jsoup.connect(url).get())
+      val local = Resource.readOrNull("/docs/$pageName.html")
+      if (local != null) {
+        cont.resume(Jsoup.parse(local))
+        return@suspendCoroutine
+      }
+      cont.resume(Jsoup.connect("$BASE_DOCS_URL$pageName.html").get())
     } catch (e: Throwable) {
       cont.resumeWithException(e)
     }
@@ -75,5 +81,9 @@ private fun String.toCamelKebabCase(): String {
 private object Resource {
   fun read(name: String): String {
     return Resource::class.java.getResource(name)!!.readText()
+  }
+
+  fun readOrNull(name: String): String? {
+    return Resource::class.java.getResource(name)?.readText()
   }
 }

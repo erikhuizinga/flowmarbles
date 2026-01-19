@@ -13,12 +13,58 @@ ext.ktor_version = '3.3.3'
 ext.logback_version = '1.5.25'
 ext.jsoup_version = '1.22.1'
 
+def docsBaseUrl = 'https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/'
+def docsSourceDir = file("$rootDir/app/src/main/kotlin/com/github/rougsig/flowmarbles/operators")
+def docsOutputDir = layout.buildDirectory.dir('generated/docs')
+def fetchDocs = providers.gradleProperty('fetchDocs').map { it == 'true' }.orElse(true)
+
+def toKebabCase = { String value ->
+  value.replaceAll(/([a-z0-9])([A-Z])/, '$1-$2').toLowerCase(Locale.ROOT)
+}
+
+def docsNamesProvider = providers.provider {
+  def names = new LinkedHashSet<String>()
+  if (docsSourceDir.exists()) {
+    fileTree(docsSourceDir).matching { include '**/*.kt' }.files.each { file ->
+      def matcher = file.text =~ /sandbox\\(\\s*\"([^\"]+)\"/
+      matcher.each { match ->
+        names << match[1]
+      }
+    }
+  }
+  return names as List
+}
+
 kotlin {
   jvmToolchain(21)
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
   kotlinOptions.jvmTarget = "21"
+}
+
+tasks.register('downloadDocs') {
+  inputs.property('docsBaseUrl', docsBaseUrl)
+  inputs.property('docsNames', docsNamesProvider)
+  outputs.dir(docsOutputDir)
+  onlyIf { fetchDocs.get() }
+  doLast {
+    def outDir = docsOutputDir.get().asFile
+    outDir.mkdirs()
+    docsNamesProvider.get().each { name ->
+      def kebab = toKebabCase(name)
+      def target = new File(outDir, "${kebab}.html")
+      if (!target.exists()) {
+        target.text = new URL("${docsBaseUrl}${kebab}.html").getText('UTF-8')
+      }
+    }
+    new File(outDir, 'pages.txt').text = docsNamesProvider.get().join('\n')
+  }
+}
+
+sourceSets.main.resources.srcDir(docsOutputDir)
+tasks.named('processResources') {
+  dependsOn tasks.named('downloadDocs')
 }
 
 dependencies {
