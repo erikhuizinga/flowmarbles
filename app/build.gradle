@@ -1,14 +1,24 @@
 plugins {
-  id 'org.jetbrains.kotlin.js' version '1.6.10'
+  id 'org.jetbrains.kotlin.multiplatform' version '2.3.0'
 }
 
 repositories {
   mavenCentral()
 }
 
-dependencies {
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
-  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.0"
-}
+kotlin {
+  js(IR) {
+    browser()
+    binaries.executable()
+  }
 
-kotlin.target.browser {}
+  sourceSets {
+    jsMain {
+      kotlin.srcDir("src/main/kotlin")
+      resources.srcDir("src/main/resources")
+      dependencies {
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
+      }
+    }
+  }
+}

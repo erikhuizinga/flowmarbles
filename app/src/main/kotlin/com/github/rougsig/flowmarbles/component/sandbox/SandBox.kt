@@ -29,11 +29,11 @@ class SandBox<T : Any> : Component {
   private val docs = KotlinDocs()
   val kotlinVersion = html("p") {
     attr("class", "version version--first")
-    text = "kotlinx.coroutines version is 1.6.0"
+    text = "kotlinx.coroutines version is 1.10.2"
   }
   val coroutinesVersion = html("p") {
     attr("class", "version")
-    text = "kotlin version is 1.6.10"
+    text = "kotlin version is 2.3.0"
   }
   override val rootNode = html("div") {
     attr("class", "sandbox")
@@ -61,7 +61,7 @@ class SandBox<T : Any> : Component {
     val virtualTimeDispatcher = VirtualTimeDispatcher()
     virtualTimeDispatcher.pauseDispatcher()
     job?.cancel()
-    job = (GlobalScope + virtualTimeDispatcher).launch {
+    job = CoroutineScope(virtualTimeDispatcher + SupervisorJob()).launch {
       output.setModel(
         transformer(input.map { it.toTimedFlow() })
           .map { it.copy(time = virtualTimeDispatcher.currentTime) }
