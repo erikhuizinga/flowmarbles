@@ -4,12 +4,13 @@ import com.github.rougsig.flowmarbles.core.Component
 import com.github.rougsig.flowmarbles.core.html
 import com.github.rougsig.flowmarbles.extensions.toCamelKebabCase
 
+private const val DOCS_BASE_URL = "/docs/"
 private const val KOTLIN_DOCS_URL = "https://kotlin.github.io/kotlinx.coroutines/"
 
 class KotlinDocs : Component {
   fun setModel(model: String) {
     content.setAttribute("height", "0")
-    content.setAttribute("src", "https://flowmarbles.com/docs/$model")
+    content.setAttribute("src", "$DOCS_BASE_URL$model")
     linkToOriginal.setAttribute(
       "href",
       "${KOTLIN_DOCS_URL}kotlinx-coroutines-core/kotlinx.coroutines.flow/${model.toCamelKebabCase()}.html"
