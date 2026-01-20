@@ -28,7 +28,7 @@ fun main() {
           val doc = getDocsHtml(pageName)
           println("$BASE_DOCS_URL$pageName.html")
 
-          val pageContents = doc.select(".content")
+          val pageContents = doc.select("#content, .content")
           if (pageContents.isEmpty()) error("Content not found for: '$page'")
           pageContents.select("a").forEach { link ->
             link.attr("target", "_blank")
