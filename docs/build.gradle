@@ -82,6 +82,7 @@ dependencies {
 
 tasks.register('fatJar', Jar) {
   archiveBaseName.set('server')
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   manifest {
     attributes 'Implementation-Title': 'FlowmarblesKotlinDocs'
     attributes 'Main-Class': 'com.github.rougsig.kotlindocs.MainKt'
