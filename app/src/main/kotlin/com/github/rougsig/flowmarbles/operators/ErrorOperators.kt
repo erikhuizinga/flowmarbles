@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.retryWhen
+import kotlinx.coroutines.flow.transform
 
 @ExperimentalCoroutinesApi
 fun errorOperators() = listOf(
@@ -46,16 +47,18 @@ fun errorOperators() = listOf(
           marble("C", 450)
         )
       ),
-      "retry(1)"
+      "first = true<br>transform {<br>&nbsp;&nbsp;&nbsp;&nbsp;if (it == \"X\" && first) { first = false; error(\"boom\") }<br>&nbsp;&nbsp;&nbsp;&nbsp;emit(it)<br>}<br>.retry(1)"
     ) { inputs ->
-      var attempt = 0
-      flow {
-        attempt += 1
-        inputs[0].collect { value ->
-          if (value.value == "X" && attempt == 1) error("boom")
+      var hasErrored = false
+      inputs[0]
+        .transform { value ->
+          if (!hasErrored && value.value == "X") {
+            hasErrored = true
+            error("boom")
+          }
           emit(value)
         }
-      }.retry(1)
+        .retry(1)
     }
   ),
   menuItem(

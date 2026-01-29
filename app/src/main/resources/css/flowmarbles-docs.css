@@ -113,6 +113,12 @@ body, input {
     user-select: none
 }
 
+.sandbox_label_block {
+    display: inline-block;
+    text-align: left;
+    line-height: 1.4
+}
+
 .version {
     margin-top: 8px
 }
