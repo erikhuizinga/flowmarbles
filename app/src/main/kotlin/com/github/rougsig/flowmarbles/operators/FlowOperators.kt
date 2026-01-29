@@ -11,6 +11,7 @@ val operators = listOf(
   delayOperators(),
   distinctOperators(),
   emittersOperators(),
+  errorOperators(),
   limitOperators(),
   mergeOperators(),
   terminalOperators(),
