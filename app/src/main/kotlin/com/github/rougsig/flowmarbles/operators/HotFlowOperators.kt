@@ -4,6 +4,7 @@ import com.github.rougsig.flowmarbles.component.timeline.Marble
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.channelFlow
@@ -105,6 +106,41 @@ fun hotFlowOperators() = listOf(
         launch {
           delay(350)
           shared.collect { value ->
+            send(marble("2${value.value}", 0, Colors.colors[1]))
+          }
+        }
+      }
+    }
+  ),
+  menuItem(
+    label("mutableStateFlow"),
+    sandbox(
+      "mutableStateFlow",
+      inputs(
+        input(
+          marble("A", 0),
+          marble("B", 150),
+          marble("C", 300),
+          marble("D", 600)
+        )
+      ),
+      "MutableStateFlow(\"I\")"
+    ) { inputs ->
+      channelFlow {
+        val state = MutableStateFlow(marble("I", 0, Colors.accentColors[0]))
+        launch {
+          inputs[0].collect { value ->
+            state.value = value
+          }
+        }
+        launch {
+          state.collect { value ->
+            send(marble("1${value.value}", 0, Colors.colors[0]))
+          }
+        }
+        launch {
+          delay(350)
+          state.collect { value ->
             send(marble("2${value.value}", 0, Colors.colors[1]))
           }
         }
