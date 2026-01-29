@@ -17,14 +17,14 @@ fun batchOperators() = listOf(
           marble("2", 150),
           marble("3", 300),
           marble("4", 450),
-          marble("5", 600),
-          marble("6", 750)
+          marble("5", 600)
         )
       ),
       "chunked(2)"
     ) { inputs ->
       inputs[0].chunked(2).map { chunk ->
-        marble(chunk.joinToString("") { it.value }, 0, Colors.accentColors[0])
+        val text = chunk.joinToString(", ") { it.value }
+        marble("[$text]", 0, Colors.accentColors[0])
       }
     }
   )
