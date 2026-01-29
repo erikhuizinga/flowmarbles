@@ -70,13 +70,13 @@ fun mergeOperators() = listOf(
       inputs(
         input(
           marble("1", 0),
-          marble("2", 300),
-          marble("3", 600)
+          marble("2", 120),
+          marble("3", 240)
         ),
         input(
           marble("A", 0),
-          marble("B", 150),
-          marble("C", 300)
+          marble("B", 200),
+          marble("C", 400)
         )
       ),
       "flowOf(flow1, flow2).flattenConcat()"
