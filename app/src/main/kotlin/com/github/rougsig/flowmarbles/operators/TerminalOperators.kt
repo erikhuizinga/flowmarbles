@@ -26,7 +26,7 @@ fun terminalOperators() = listOf(
     ) { inputs ->
       flow {
         val hasMatch = inputs[0].any { it.value > 4 }
-        val output = if (hasMatch) "T" else "F"
+        val output = if (hasMatch) 1 else 0
         emit(marble(output, 0, Colors.accentColors[0]))
       }
     }
@@ -47,7 +47,7 @@ fun terminalOperators() = listOf(
     ) { inputs ->
       flow {
         val allMatch = inputs[0].all { it.value < 5 }
-        val output = if (allMatch) "T" else "F"
+        val output = if (allMatch) 1 else 0
         emit(marble(output, 0, Colors.accentColors[0]))
       }
     }
@@ -67,7 +67,7 @@ fun terminalOperators() = listOf(
     ) { inputs ->
       flow {
         val noneMatch = inputs[0].none { it.value == 3 }
-        val output = if (noneMatch) "T" else "F"
+        val output = if (noneMatch) 1 else 0
         emit(marble(output, 0, Colors.accentColors[0]))
       }
     }

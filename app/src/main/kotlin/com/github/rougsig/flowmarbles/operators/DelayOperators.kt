@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.flow.timeout
+import kotlin.time.Duration.Companion.milliseconds
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -55,10 +56,10 @@ fun delayOperators() = listOf(
           marble("4", 650)
         )
       ),
-      "timeout(250).catch { emit(\"T\") }"
+      "timeout(250.milliseconds).catch { emit(\"T\") }"
     ) { inputs ->
       inputs[0]
-        .timeout(250)
+        .timeout(250.milliseconds)
         .catch { emit(marble("T", 0, Colors.accentColors[0])) }
     }
   )
