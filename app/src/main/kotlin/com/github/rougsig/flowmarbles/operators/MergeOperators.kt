@@ -89,6 +89,31 @@ fun mergeOperators() = listOf(
     }
   ),
   menuItem(
+    label("flattenMerge"),
+    sandbox(
+      "flattenMerge",
+      inputs(
+        input(
+          marble("1", 0),
+          marble("2", 300),
+          marble("3", 600)
+        ),
+        input(
+          marble("A", 0),
+          marble("B", 150),
+          marble("C", 300)
+        )
+      ),
+      "flowOf(flow1, flow2).flattenMerge()"
+    ) { inputs ->
+      flow {
+        emit(inputs[0])
+        delay(200)
+        emit(inputs[1])
+      }.flattenMerge()
+    }
+  ),
+  menuItem(
     label("merge"),
     sandbox(
       "merge",
