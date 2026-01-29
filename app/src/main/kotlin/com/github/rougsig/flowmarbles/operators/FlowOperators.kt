@@ -13,6 +13,7 @@ val operators = listOf(
   emittersOperators(),
   limitOperators(),
   mergeOperators(),
+  terminalOperators(),
   transformOperators(),
   zipOperators()
 ).flatten()
