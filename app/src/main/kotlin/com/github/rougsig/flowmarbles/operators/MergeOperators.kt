@@ -83,7 +83,6 @@ fun mergeOperators() = listOf(
     ) { inputs ->
       flow {
         emit(inputs[0])
-        delay(200)
         emit(inputs[1])
       }.flattenConcat()
     }
@@ -108,7 +107,6 @@ fun mergeOperators() = listOf(
     ) { inputs ->
       flow {
         emit(inputs[0])
-        delay(200)
         emit(inputs[1])
       }.flattenMerge()
     }
