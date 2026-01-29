@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 
 @ExperimentalCoroutinesApi
 fun terminalOperators() = listOf(
-  menuHeader("terminal"),
+  menuHeader("logical"),
   menuItem(
     label("any"),
     sandbox(
