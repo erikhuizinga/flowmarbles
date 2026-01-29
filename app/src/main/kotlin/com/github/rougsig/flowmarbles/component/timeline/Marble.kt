@@ -6,7 +6,9 @@ import kotlin.math.max
 
 class Marble<T : Any>(model: Model<T>, posY: Long = 1) : Component {
   private val displayValue = model.value.toString()
-  private val isPill = displayValue.startsWith("[") && displayValue.endsWith("]")
+  private val isPill = (displayValue.startsWith("[") && displayValue.endsWith("]"))
+    || displayValue == "true"
+    || displayValue == "false"
   private val pillTextPadding = 30
   private val pillWidth = max(50, displayValue.length * 16 + pillTextPadding)
   private val pillHalfWidth = pillWidth / 2.0
