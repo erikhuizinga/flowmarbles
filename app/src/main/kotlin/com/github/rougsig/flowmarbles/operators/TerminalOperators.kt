@@ -3,6 +3,7 @@ package com.github.rougsig.flowmarbles.operators
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.all
 import kotlinx.coroutines.flow.any
+import kotlinx.coroutines.flow.none
 import kotlinx.coroutines.flow.flow
 
 @ExperimentalCoroutinesApi
@@ -47,6 +48,26 @@ fun terminalOperators() = listOf(
       flow {
         val allMatch = inputs[0].all { it.value < 5 }
         val output = if (allMatch) "T" else "F"
+        emit(marble(output, 0, Colors.accentColors[0]))
+      }
+    }
+  ),
+  menuItem(
+    label("none"),
+    sandbox(
+      "none",
+      inputs(
+        input(
+          marble(1, 0),
+          marble(2, 150),
+          marble(4, 300)
+        )
+      ),
+      "none { it == 3 }"
+    ) { inputs ->
+      flow {
+        val noneMatch = inputs[0].none { it.value == 3 }
+        val output = if (noneMatch) "T" else "F"
         emit(marble(output, 0, Colors.accentColors[0]))
       }
     }
