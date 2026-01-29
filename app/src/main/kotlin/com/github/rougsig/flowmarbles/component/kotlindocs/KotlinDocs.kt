@@ -5,7 +5,8 @@ import com.github.rougsig.flowmarbles.core.html
 import com.github.rougsig.flowmarbles.extensions.toCamelKebabCase
 
 private const val DOCS_BASE_URL = "/docs/"
-private const val KOTLIN_DOCS_URL = "https://kotlin.github.io/kotlinx.coroutines/"
+private const val KOTLIN_DOCS_URL = "https://kotlinlang.org/api/kotlinx.coroutines/"
+private const val DOCS_PACKAGE_PATH = "kotlinx-coroutines-core/kotlinx.coroutines.flow/"
 
 class KotlinDocs : Component {
   fun setModel(model: String) {
@@ -13,7 +14,7 @@ class KotlinDocs : Component {
     content.setAttribute("src", "$DOCS_BASE_URL$model")
     linkToOriginal.setAttribute(
       "href",
-      "${KOTLIN_DOCS_URL}kotlinx-coroutines-core/kotlinx.coroutines.flow/${model.toCamelKebabCase()}.html"
+      "${KOTLIN_DOCS_URL}${docsPath(model)}"
     )
   }
 
@@ -45,4 +46,17 @@ class KotlinDocs : Component {
     element(docsSource)
     element(content)
   }
+}
+
+private fun isTypeName(value: String): Boolean {
+  return value.firstOrNull()?.isUpperCase() == true
+}
+
+private fun docsSlug(value: String): String {
+  return if (isTypeName(value)) "-${value.toCamelKebabCase()}" else value.toCamelKebabCase()
+}
+
+private fun docsPath(value: String): String {
+  val slug = docsSlug(value)
+  return if (isTypeName(value)) "${DOCS_PACKAGE_PATH}${slug}/" else "${DOCS_PACKAGE_PATH}${slug}.html"
 }

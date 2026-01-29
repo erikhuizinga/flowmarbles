@@ -80,7 +80,7 @@ fun hotFlowOperators() = listOf(
   menuItem(
     label("mutableSharedFlow"),
     sandbox(
-      "mutableSharedFlow",
+      "MutableSharedFlow",
       inputs(
         input(
           marble("A", 0),
@@ -115,7 +115,7 @@ fun hotFlowOperators() = listOf(
   menuItem(
     label("mutableStateFlow"),
     sandbox(
-      "mutableStateFlow",
+      "MutableStateFlow",
       inputs(
         input(
           marble("A", 0),
