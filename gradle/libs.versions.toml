@@ -7,7 +7,6 @@ jsoup = "1.22.1"
 jvm = "21"
 
 [libraries]
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }

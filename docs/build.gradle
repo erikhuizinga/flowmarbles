@@ -65,7 +65,6 @@ tasks.named('processResources') {
 
 dependencies {
   implementation platform(libs.ktor.bom)
-  implementation libs.kotlin.stdlib
   implementation libs.coroutines.core
   implementation libs.jsoup
 
