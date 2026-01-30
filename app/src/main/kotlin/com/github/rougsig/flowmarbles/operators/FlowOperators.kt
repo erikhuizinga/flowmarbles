@@ -15,7 +15,7 @@ val operators = listOf(
   hotFlowOperators(),
   limitOperators(),
   mergeOperators(),
-  terminalOperators(),
+  logicalOperators(),
   transformOperators(),
   zipOperators()
 ).flatten()

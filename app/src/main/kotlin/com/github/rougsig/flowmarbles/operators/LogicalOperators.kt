@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.none
 import kotlinx.coroutines.flow.flow
 
 @ExperimentalCoroutinesApi
-fun terminalOperators() = listOf(
+fun logicalOperators() = listOf(
   menuHeader("logical"),
   menuItem(
     label("any"),
