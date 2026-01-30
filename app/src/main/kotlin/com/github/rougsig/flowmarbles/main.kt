@@ -51,7 +51,10 @@ fun main() {
     }
   }
 
-  menu.itemSelectedListener = { _, item -> window.location.hash = "#${item.label}" }
+  menu.itemSelectedListener = { _, item ->
+    window.location.hash = "#${item.label}"
+    window.scrollTo(0.0, 0.0)
+  }
   updateSandBox()
 
   window.addEventListener("hashchange", {
@@ -59,6 +62,7 @@ fun main() {
     val selectedItem = findItemByHash(hash)
     menu.selectedItem = selectedItem
     updateSandBox()
+    window.scrollTo(0.0, 0.0)
   })
 
   app.appendChild(header)

@@ -10,9 +10,18 @@ class SandBoxLabel : Component {
 
   var label: String = ""
     set(value) {
-      rootNode.innerHTML = value
+      val isMultiline = value.contains("<br>")
+      rootNode.innerHTML = if (isMultiline) {
+        "<div class=\"sandbox_label_block\">$value</div>"
+      } else {
+        value
+      }
       val fontSize = if (value.length >= 45) 1.3f else if (value.length >= 30) 1.5f else 2f
-      rootNode.setAttribute("style", "font-size: ${fontSize}rem; font-family: 'Roboto Mono', monospace;")
+      val lineHeight = if (isMultiline) "normal" else "72px"
+      rootNode.setAttribute(
+        "style",
+        "font-size: ${fontSize}rem; font-family: 'Roboto Mono', monospace; line-height: ${lineHeight}; text-align: center;"
+      )
       field = value
     }
 }

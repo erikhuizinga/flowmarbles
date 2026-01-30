@@ -64,6 +64,54 @@ fun mergeOperators() = listOf(
     ) { inputs -> inputs[0].flatMapLatest { inputs[1] } }
   ),
   menuItem(
+    label("flattenConcat"),
+    sandbox(
+      "flattenConcat",
+      inputs(
+        input(
+          marble("1", 0),
+          marble("2", 120),
+          marble("3", 240)
+        ),
+        input(
+          marble("A", 0),
+          marble("B", 200),
+          marble("C", 400)
+        )
+      ),
+      "flowOf(flow1, flow2).flattenConcat()"
+    ) { inputs ->
+      flow {
+        emit(inputs[0])
+        emit(inputs[1])
+      }.flattenConcat()
+    }
+  ),
+  menuItem(
+    label("flattenMerge"),
+    sandbox(
+      "flattenMerge",
+      inputs(
+        input(
+          marble("1", 0),
+          marble("2", 300),
+          marble("3", 600)
+        ),
+        input(
+          marble("A", 0),
+          marble("B", 150),
+          marble("C", 300)
+        )
+      ),
+      "flowOf(flow1, flow2).flattenMerge()"
+    ) { inputs ->
+      flow {
+        emit(inputs[0])
+        emit(inputs[1])
+      }.flattenMerge()
+    }
+  ),
+  menuItem(
     label("merge"),
     sandbox(
       "merge",

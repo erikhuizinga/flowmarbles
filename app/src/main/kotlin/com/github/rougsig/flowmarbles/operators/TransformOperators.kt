@@ -1,10 +1,12 @@
 package com.github.rougsig.flowmarbles.operators
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.runningFold
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 fun transformOperators() = listOf(
   menuHeader("transform"),
@@ -205,5 +207,27 @@ fun transformOperators() = listOf(
       ),
       "runningFold(0) { acc, v -> acc + v }"
     ) { inputs -> inputs[0].runningFold(marble(0, 0)) { acc, v -> acc + v } }
+  ),
+  menuItem(
+    label("transformWhile"),
+    sandbox(
+      "transformWhile",
+      inputs(
+        input(
+          marble(1, 0),
+          marble(2, 150),
+          marble(3, 300),
+          marble(4, 450),
+          marble(5, 600),
+          marble(6, 750)
+        )
+      ),
+      "transformWhile { emit(it); it < 4 }"
+    ) { inputs ->
+      inputs[0].transformWhile { value ->
+        emit(value)
+        value.value < 4
+      }
+    }
   )
 )

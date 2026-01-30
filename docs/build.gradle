@@ -14,8 +14,25 @@ def docsSourceDir = file("$rootDir/app/src/main/kotlin/com/github/rougsig/flowma
 def docsOutputDir = layout.buildDirectory.dir('generated/docs')
 def fetchDocs = providers.gradleProperty('fetchDocs').map { it == 'true' }.orElse(true)
 
+def isTypeName = { String value ->
+  value && Character.isUpperCase(value.charAt(0))
+}
+
 def toKebabCase = { String value ->
   value.replaceAll(/([a-z0-9])([A-Z])/, '$1-$2').toLowerCase(Locale.ROOT)
+}
+
+def toDocSlug = { String value ->
+  isTypeName(value) ? "-${toKebabCase(value)}" : toKebabCase(value)
+}
+
+def toDocUrl = { String value ->
+  def slug = toDocSlug(value)
+  isTypeName(value) ? "${docsBaseUrl}${slug}/" : "${docsBaseUrl}${slug}.html"
+}
+
+def toDocFileName = { String value ->
+  "${toDocSlug(value)}.html"
 }
 
 def docsNamesProvider = providers.provider {
@@ -48,10 +65,9 @@ tasks.register('downloadDocs') {
     def outDir = docsOutputDir.get().asFile
     outDir.mkdirs()
     docsNamesProvider.get().each { name ->
-      def kebab = toKebabCase(name)
-      def target = new File(outDir, "${kebab}.html")
+      def target = new File(outDir, toDocFileName(name))
       if (!target.exists()) {
-        target.text = new URL("${docsBaseUrl}${kebab}.html").getText('UTF-8')
+        target.text = new URL(toDocUrl(name)).getText('UTF-8')
       }
     }
     new File(outDir, 'pages.txt').text = docsNamesProvider.get().join('\n')

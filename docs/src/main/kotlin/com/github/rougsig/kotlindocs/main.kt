@@ -23,10 +23,11 @@ fun main() {
       get("/{page}") {
         try {
           val page = call.parameters["page"]!!
-          val pageName = page.toCamelKebabCase()
+          val pageName = docSlug(page)
+          val pageUrl = docUrl(page)
           val uri = URI(BASE_DOCS_URL)
-          val doc = getDocsHtml(pageName)
-          println("$BASE_DOCS_URL$pageName.html")
+          val doc = getDocsHtml(page)
+          println(pageUrl)
 
           val pageContents = doc.select("#content, .content")
           if (pageContents.isEmpty()) error("Content not found for: '$page'")
@@ -53,12 +54,12 @@ fun main() {
 private suspend fun getDocsHtml(pageName: String): Document = withContext(Dispatchers.IO) {
   suspendCoroutine { cont ->
     try {
-      val local = Resource.readOrNull("/docs/$pageName.html")
+      val local = Resource.readOrNull("/docs/${docSlug(pageName)}.html")
       if (local != null) {
         cont.resume(Jsoup.parse(local))
         return@suspendCoroutine
       }
-      cont.resume(Jsoup.connect("$BASE_DOCS_URL$pageName.html").get())
+      cont.resume(Jsoup.connect(docUrl(pageName)).get())
     } catch (e: Throwable) {
       cont.resumeWithException(e)
     }
@@ -76,6 +77,19 @@ private fun String.toCamelKebabCase(): String {
     }
   }
   return builder.toString()
+}
+
+private fun isTypeName(value: String): Boolean {
+  return value.firstOrNull()?.isUpperCase() == true
+}
+
+private fun docSlug(value: String): String {
+  return if (isTypeName(value)) "-${value.toCamelKebabCase()}" else value.toCamelKebabCase()
+}
+
+private fun docUrl(value: String): String {
+  val slug = docSlug(value)
+  return if (isTypeName(value)) "$BASE_DOCS_URL$slug/" else "$BASE_DOCS_URL$slug.html"
 }
 
 private object Resource {
