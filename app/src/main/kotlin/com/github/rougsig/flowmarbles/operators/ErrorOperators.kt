@@ -73,7 +73,7 @@ fun errorOperators() = listOf(
           marble("C", 450)
         )
       ),
-      "retryWhen { delay(200); attempt < 1 }"
+      "attempt = 0<br>transform {<br>&nbsp;&nbsp;&nbsp;&nbsp;attempt++<br>&nbsp;&nbsp;&nbsp;&nbsp;if (it == \"X\" && attempt == 1) error(\"boom\")<br>&nbsp;&nbsp;&nbsp;&nbsp;emit(it)<br>}<br>.retryWhen { _, attempt -> delay(200); attempt < 1 }"
     ) { inputs ->
       var attempt = 0
       flow {
